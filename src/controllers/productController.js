@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Product = require('../models/product.model')
+const { generateEmbedding } = require("../services/huggingfaceService");
 
 const getAllProducts = async (req, res) => {
     try {
@@ -116,7 +117,10 @@ const createProduct = async (req, res) => {
             })
         } 
 
-        const newProduct = await Product.create({ ...req.body });
+        const text = `${name} ${category} ${description} ${price}`;
+        const embedding = await generateEmbedding(text);
+
+        const newProduct = await Product.create({ ...req.body, embedding });
 
         res.status(201).json({
             success: true,
