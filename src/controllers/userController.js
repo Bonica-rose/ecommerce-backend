@@ -3,14 +3,25 @@ const bcrypt = require('bcryptjs')
 
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find().select('-password -__v');
+        const users = await User.aggregate([
+            {
+                $sort: { createdAt: -1 } // Latest users first
+            },
+            {
+                $project: {
+                    password: 0,
+                    __v: 0
+                }
+            }
+        ]);
 
         res.status(200).json({
             success: true,
             message: 'Users found',
             count: users.length,
             data: users,
-        })
+        });
+        
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -53,7 +64,15 @@ const createUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user id."
+            });
+        }
+        
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -76,13 +95,21 @@ const getUserById = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user id."
+            });
+        }
+
         const { email, role, address } = req.body;
 
-        const conflictRecord = await User.findOne({ email: email, _id: { $ne: req.params.id } });    
+        const conflictRecord = await User.findOne({ email: email, _id: { $ne: id } });    
         if (conflictRecord) {
             return res.status(400).json({ success: false, message: "Email is already taken by another user." });
         }
-        const user = await User.findByIdAndUpdate(req.params.id,{ email, role, address } ,{new:true});        
+        const user = await User.findByIdAndUpdate(id,{ email, role, address } ,{new:true});        
 
         res.status(200).json({
             success: true,
@@ -99,7 +126,15 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id);        
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user id."
+            });
+        }
+
+        const user = await User.findByIdAndDelete(id);        
 
         res.status(200).json({
             success: true,

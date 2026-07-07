@@ -6,6 +6,7 @@ const app = express();
 //importing routes
 const authRoutes = require('./routes/auth.routes')
 const userRoutes = require('./routes/user.routes')
+const productRoutes = require('./routes/product.routes')
 
 // global middlewares
 app.use(cors());
@@ -24,8 +25,9 @@ app.get('/', (req, res) => {
 })
 
 //routes
-app.use('/api/auth/', authRoutes)
-app.use('/api/user/', userRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/user', userRoutes)
+app.use('/api/products', productRoutes)
 
 app.use(notFound);
 app.use(errorHandler);
