@@ -14,5 +14,12 @@ insights
 - Node.js
 - Express.js
 - bcryptjs & jsonwebtoken
-- Predictive Analytics(RapidMiner)
+- Product recommendation using Hugging face
 - Git & GitHub
+
+## Create Admin using Database Seeder
+- Run this command: `npm run seed` initially and once
+- Admin password is 'Admin@123'
+
+## Password of users created by admin
+- Password is '123456'
