@@ -1,12 +1,13 @@
 {
   "name": "ecommerce-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "A e-commerce application, built with Node.js, Express, and MongoDB. This project provides RESTful APIs for user authentication, product management, order processing, and more.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "seed": "node seed/createAdmin.js"
   },
   "keywords": [],
   "author": "",
