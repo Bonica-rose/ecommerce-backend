@@ -18,47 +18,48 @@ const orderValidator = (req, res, next) => {
             field: "items",
             message: "At least one order item is required."
         });
-    }
+    } else {
 
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i];
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
 
-        // Product
-        if (!item.product) {
-            errors.push({
-                field: "product",
-                message: `Product is required for item ${i + 1}.`
-            });
-        }
+            // Product
+            if (!item.product) {
+                errors.push({
+                    field: "product",
+                    message: `Product is required for item ${i + 1}.`
+                });
+            }
 
-        if (!mongoose.Types.ObjectId.isValid(item.product)) {
-            errors.push({
-                field: "product",
-                message: `Invalid product id for item ${i + 1}.`
-            });
-        }
+            if (!mongoose.Types.ObjectId.isValid(item.product)) {
+                errors.push({
+                    field: "product",
+                    message: `Invalid product id for item ${i + 1}.`
+                });
+            }
 
-        // Quantity
-        if (item.quantity === undefined || item.quantity === null || item.quantity === '') {
-            errors.push({
-                field: "quantity",
-                message: `Quantity is required for item ${i + 1}.`
-            });
-        }
+            // Quantity
+            if (item.quantity === undefined || item.quantity === null || item.quantity === '') {
+                errors.push({
+                    field: "quantity",
+                    message: `Quantity is required for item ${i + 1}.`
+                });
+            }
 
-        if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
-            errors.push({
-                field: "quantity",
-                message: `Quantity must be a positive integer for item ${i + 1}.`
-            });
-        }
+            if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
+                errors.push({
+                    field: "quantity",
+                    message: `Quantity must be a positive integer for item ${i + 1}.`
+                });
+            }
 
-        // Client should NOT send price
-        if (item.price !== undefined) {
-            errors.push({
-                field: "price",
-                message: "Price should not be provided by the client."
-            });
+            // Client should NOT send price
+            if (item.price !== undefined) {
+                errors.push({
+                    field: "price",
+                    message: "Price should not be provided by the client."
+                });
+            }
         }
     }
     
