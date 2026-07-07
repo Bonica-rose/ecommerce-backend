@@ -7,6 +7,8 @@ const app = express();
 const authRoutes = require('./routes/auth.routes')
 const userRoutes = require('./routes/user.routes')
 const productRoutes = require('./routes/product.routes')
+const userOrderRoutes = require('./routes/userOrder.routes')
+const adminOrderRoutes = require('./routes/adminOrder.routes')
 
 // global middlewares
 app.use(cors());
@@ -28,6 +30,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/products', productRoutes)
+app.use('/api/orders', userOrderRoutes)
+app.use('/api/admin/orders', adminOrderRoutes)
 
 app.use(notFound);
 app.use(errorHandler);
