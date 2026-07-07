@@ -7,7 +7,8 @@ const productSchema = new mongoose.Schema(
         price: { type: Number, required: true, min: 0, index: true  },
         category: { type: String, required: true, trim: true, index: true  },
         quantity: { type: Number, required: true, min: 1, default: 1 },
-        inStock: { type: Boolean, default: true }
+        inStock: { type: Boolean, default: true },
+        embedding: { type: [Number], default: [] }
     },
     {
         timestamps: true

@@ -69,6 +69,16 @@ const getAllProducts = async (req, res) => {
             }
         });
 
+        pipeline.push({
+            $project: {
+                _id: 0, // Kept by default, change to 0 if you want to exclude it
+                name: 1,
+                description: 1,
+                price: 1,
+                category: 1
+            }
+        });
+
         const products = await Product.aggregate(pipeline);
         // const products = await Product.aggregate([
         //     {

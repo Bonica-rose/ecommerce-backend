@@ -17,7 +17,7 @@ const validationMiddleware = require('../middleware/validation')
 const authenticate = require('../middleware/authentication')
 const authorize = require('../middleware/authorize')
 
-router.get('/', authenticate, getAllProducts);
+router.get('/', getAllProducts);
 router.post('/', authenticate, authorize('admin'), validateProductCreate, validationMiddleware, createProduct);
 router.get('/:id', authenticate, getProductById);
 router.put('/:id', authenticate, authorize('admin'), validateProductUpdate, validationMiddleware, updateProduct);
