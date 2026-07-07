@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/user.model')
 const bcrypt = require('bcryptjs')
+const BlacklistedToken = require("../models/blacklistedToken.model");
 
 const getUserProfile = async (req, res) => {
     try {

@@ -1,11 +1,12 @@
 const Order = require('../models/order.model')
+const Product = require('../models/product.model')
 
 const getMyOrders = async (req, res) => {
     try {
         const userId = req.user._id;
         const orders = await Order.aggregate([
             {
-                $match: { user: req.user._id }
+                $match: { user: req.user._id, isDeleted: false }
             },
             {
                 $sort: { createdAt: -1 } // Latest orders first
@@ -90,7 +91,8 @@ const getOrderById = async (req, res) => {
         const orderId = req.params.id;
         const userId = req.user._id;        
 
-        const order = await Order.findOne({ _id: orderId, user: userId });
+        const order = await Order.findOne({ _id: orderId, user: userId, isDeleted: false })
+            .populate('items.product');
         if (!order) {
             return res.status(404).json({
                 success: false,
@@ -117,7 +119,7 @@ const cancelOrder = async (req, res) => {
         const orderId = req.params.id;
         const userId = req.user._id;
 
-        const order = await Order.findOne({ _id: orderId, user: userId });
+        const order = await Order.findOne({ _id: orderId, user: userId, isDeleted: false });
 
         if (!order) {
             return res.status(404).json({
@@ -126,14 +128,14 @@ const cancelOrder = async (req, res) => {
             });
         }
 
-        if (order.status !== 'pending') {
+        if (order.orderStatus !== 'pending') {
             return res.status(400).json({
                 success: false,
                 message: 'Only pending orders can be cancelled'
             });
         }
 
-        order.status = 'cancelled';
+        order.orderStatus = 'cancelled';
         await order.save();
 
         res.status(200).json({

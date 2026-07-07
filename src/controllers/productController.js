@@ -155,8 +155,7 @@ const getProductById = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const { id } = req.params;
-
+        const { id } = req.params; 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 success: false,
@@ -164,10 +163,12 @@ const updateProduct = async (req, res) => {
             });
         }
 
+        const { name, description, price, category, quantity } = req.body;
+
         const updatedProduct = await Product.findByIdAndUpdate(
             id,
             { name, description, price, category, quantity },
-            { new: true }
+            { new: true, runValidators: true }
         );
 
         if (!updatedProduct) {

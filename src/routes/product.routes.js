@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-const validateProduct = require('../validators/productValidator')
+const {
+    validateProductCreate, validateProductUpdate
+} = require('../validators/productValidator')
 
 const { 
     getAllProducts,
@@ -16,9 +18,9 @@ const authenticate = require('../middleware/authentication')
 const authorize = require('../middleware/authorize')
 
 router.get('/', authenticate, getAllProducts);
-router.post('/', authenticate, authorize('admin'), validateProduct, validationMiddleware, createProduct);
+router.post('/', authenticate, authorize('admin'), validateProductCreate, validationMiddleware, createProduct);
 router.get('/:id', authenticate, getProductById);
-router.put('/:id', authenticate, authorize('admin'), validateProduct, validationMiddleware, updateProduct);
+router.put('/:id', authenticate, authorize('admin'), validateProductUpdate, validationMiddleware, updateProduct);
 router.delete('/:id', authenticate, authorize('admin'), deleteProduct);
 
 module.exports = router

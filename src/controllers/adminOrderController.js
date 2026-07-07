@@ -8,6 +8,9 @@ const getAllOrders = async (req, res) => {
         const userId = req.user._id;
         const orders = await Order.aggregate([
             {
+                $match: { isDeleted: false }
+            },
+            {
                 $sort: { createdAt: -1 } // Latest orders first
             }
         ]);
