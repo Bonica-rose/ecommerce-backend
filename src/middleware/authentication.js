@@ -34,7 +34,7 @@ const authentication = async (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const user = await User.findById(decoded.id);
+        const user = await User.findById(decoded.id).select('-password -__v');
 
         if (!user) {
             return res.status(401).json({
@@ -43,7 +43,20 @@ const authentication = async (req, res, next) => {
             });
         }
 
+        // Check password change time
+        if (
+            user.passwordChangedAt &&
+            decoded.iat * 1000 < user.passwordChangedAt.getTime()
+        ) {
+            return res.status(401).json({
+                success: false,
+                message: "Password has changed. Please login again."
+            });
+        }
+
         req.user = user;
+        // console.log("Authenticated user:", user); // Debugging line
+        // console.log("Requesting user:", req.user); // Debugging line
         req.token = token;
         req.tokenExpiry = decoded.exp;
 

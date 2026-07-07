@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
         role: { type: String, enum: ["admin", "user", "guest"], default: "user" },
         mobile: { type: String },
         address: { type: String },
+        passwordChangedAt: { type: Date }
     },
     {
         timestamps: true

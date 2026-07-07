@@ -1,5 +1,7 @@
 const authorize = (...roles) => {
 
+    // console.log("Roles in authorize middleware:", roles); // Debugging line
+
     return (req, res, next) => {
 
         if (!req.user) {

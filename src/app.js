@@ -1,15 +1,21 @@
 const express = require('express');
 const cors = require('cors');
 
-const authRoutes = require('./routes/auth.routes')
-const errorHandler = require('./middleware/errorHandler')
-const notFound = require('./middleware/notFound')
-
 const app = express();
+
+//importing routes
+const authRoutes = require('./routes/auth.routes')
+const userRoutes = require('./routes/user.routes')
+
+// global middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const errorHandler = require('./middleware/errorHandler')
+const notFound = require('./middleware/notFound')
+
+// connect to database
 const connectDB = require('./config/dbConnection')
 connectDB();
 
@@ -17,7 +23,9 @@ app.get('/', (req, res) => {
     res.send('<h1>An E-Commerce Backend System</h1>')
 })
 
+//routes
 app.use('/api/auth/', authRoutes)
+app.use('/api/user/', userRoutes)
 
 app.use(notFound);
 app.use(errorHandler);
