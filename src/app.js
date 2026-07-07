@@ -9,6 +9,7 @@ const userRoutes = require('./routes/user.routes')
 const productRoutes = require('./routes/product.routes')
 const userOrderRoutes = require('./routes/userOrder.routes')
 const adminOrderRoutes = require('./routes/adminOrder.routes')
+const recommendationRoutes = require('./routes/recommendation.routes')
 
 // global middlewares
 app.use(cors());
@@ -32,6 +33,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/orders', userOrderRoutes)
 app.use('/api/admin/orders', adminOrderRoutes)
+app.use('/api/products/recommend', recommendationRoutes)
 
 app.use(notFound);
 app.use(errorHandler);
