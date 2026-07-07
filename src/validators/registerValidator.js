@@ -9,11 +9,14 @@ const registerValidator = (req, res, next) => {
             field: "username",
             message: "Username is required"
         });
-    } else if (username.trim().length < 3) {
-        errors.push({
-            field: "username",
-            message: "Username must be at least 3 characters"
-        });
+    } else {
+        const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;        
+        if (!usernameRegex.test(username)) {
+            errors.push({
+                field: "username",
+                message: "Username must be 3-30 characters and contain only letters, numbers and underscore."
+            });
+        }
     }
 
     if (!email || email.trim() === "") {
@@ -22,7 +25,7 @@ const registerValidator = (req, res, next) => {
             message: "Email is required"
         });
     } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         if (!emailRegex.test(email)) {
             errors.push({
